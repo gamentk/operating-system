@@ -1,14 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+
+func show(a int) {
+	for {
+		fmt.Printf("I'm %d\n", a)
+		time.Sleep(500 * time.Millisecond)
+	}
+}
 
 func main() {
-	a := [10] int{}
-	a[0] = 10
-	a[1] = 20
-	a[2] = 30
-
-	for i := range a {
-		fmt.Printf("%d \n", a[i])
+	go show(5)
+	go show(10)
+	for {
+		fmt.Printf("I am main.\n")
+		time.Sleep(500 * time.Millisecond)
 	}
 }
