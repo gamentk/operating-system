@@ -2,21 +2,42 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
-func show(a int) {
+var (
+	data = make([]int, 0)
+)
+
+func producer() {
 	for {
-		fmt.Printf("I'm %d\n", a)
+		if len(data) < 100 {
+			mydata := rand.Intn(100)
+			data = append(data, mydata)
+			fmt.Printf("Producer --> %d", mydata)
+		} else {
+			fmt.Printf("Buffer full")
+		}
 		time.Sleep(500 * time.Millisecond)
 	}
 }
 
-func main() {
-	go show(5)
-	go show(10)
+func consumer() {
 	for {
-		fmt.Printf("I am main.\n")
-		time.Sleep(500 * time.Millisecond)
+		if len(data) != 0 {
+			mydata := data[0]
+			data = data[1:]
+			fmt.Printf("Consumer --> %d\n", mydata)
+		} else {
+			fmt.Printf("No data\n")
+		}
+		time.Sleep(300 * time.Millisecond)
 	}
+}
+
+func main() {
+	go producer()
+	go consumer()
+	select {}
 }
